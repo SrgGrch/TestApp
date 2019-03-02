@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FirstTestApp</string>
+
+    <string name="SHARED_PREFS">tech.blur.testapp</string>
 </resources>
