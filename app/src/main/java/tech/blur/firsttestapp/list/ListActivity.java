@@ -6,11 +6,12 @@ import android.os.Bundle;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import tech.blur.firsttestapp.R;
 import tech.blur.firsttestapp.moxy.MvpAndroidxActivity;
 
 public class ListActivity extends MvpAndroidxActivity implements ListView {
 
-
+//TODO доделать ресайклер
 
     @InjectPresenter
     ListPresenter presenter;
@@ -23,6 +24,7 @@ public class ListActivity extends MvpAndroidxActivity implements ListView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_list);
     }
 
 
