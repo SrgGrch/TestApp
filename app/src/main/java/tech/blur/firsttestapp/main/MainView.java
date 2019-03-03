@@ -3,6 +3,7 @@ package tech.blur.firsttestapp.main;
 import com.arellomobile.mvp.MvpView;
 
 import tech.blur.firsttestapp.core.model.Post;
+import tech.blur.firsttestapp.core.model.PostServer;
 
 interface MainView extends MvpView {
 

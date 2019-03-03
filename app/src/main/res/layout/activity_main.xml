@@ -37,9 +37,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:textSize="20dp" />
+
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
 
     <Button
         android:id="@+id/done"

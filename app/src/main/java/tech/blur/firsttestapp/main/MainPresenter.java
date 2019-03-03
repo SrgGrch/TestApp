@@ -18,6 +18,7 @@ import retrofit2.Retrofit;
 import tech.blur.firsttestapp.App;
 import tech.blur.firsttestapp.core.PreferencesApi;
 import tech.blur.firsttestapp.core.model.Post;
+import tech.blur.firsttestapp.core.model.PostServer;
 import tech.blur.firsttestapp.main.api.QueueApi;
 
 @InjectViewState
@@ -29,7 +30,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     SharedPreferences preferences;
     private QueueApi queueApi;
     private int taskPos = 0;
-    private ArrayList<Post> posts = new ArrayList<>();
+    private ArrayList<PostServer> postServers = new ArrayList<>();
+    private ArrayList<Post> posts;
     private int taskAmount;
 
     MainPresenter() {
@@ -44,33 +46,52 @@ public class MainPresenter extends MvpPresenter<MainView> {
         int tempPos = PreferencesApi.getPos(preferences);
         if (tempPos != 0) taskPos = tempPos;
 
-        queueApi.getPosts()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribeWith(new DisposableSingleObserver<List<Post>>() {
-                    @Override
-                    public void onSuccess(List<Post> res) {
-                        posts.addAll(res);
-                        taskAmount = posts.size();
-                        getViewState().onDownloadReady();
-                        getViewState().setTask(posts.get(PreferencesApi.getPos(preferences)));
-                    }
+        if ((posts = PreferencesApi.getPosts(preferences)) == null) {
+            queueApi.getPosts()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribeWith(new DisposableSingleObserver<List<PostServer>>() {
+                        @Override
+                        public void onSuccess(List<PostServer> res) {
+                            postServers.addAll(res);
+                            convertPosts();
+                            taskAmount = postServers.size();
+                            getViewState().onDownloadReady();
+                            if (taskPos < taskAmount - 1)
+                                getViewState().setTask(posts.get(PreferencesApi.getPos(preferences)));
+                            else getViewState().onTaskEnd();
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
+                        @Override
+                        public void onError(Throwable e) {
 
-                    }
-                });
+                        }
+                    });
+        } else{
+            taskAmount = posts.size();
+            getViewState().onDownloadReady();
+            if (taskPos < taskAmount - 1)
+                getViewState().setTask(posts.get(PreferencesApi.getPos(preferences)));
+            else getViewState().onTaskEnd();
+        }
     }
 
 
-
-    void onDoneClicked(){
-        if (taskPos < taskAmount) nextTask();
+    void onDoneClicked() {
+        if (taskPos < taskAmount - 1) nextTask();
         else getViewState().onTaskEnd();
     }
 
-    void nextTask(){
+    private void convertPosts() {
+        posts = new ArrayList<>();
+        for (PostServer postServer : postServers) {
+            posts.add(new Post(postServer));
+        }
+        PreferencesApi.setPosts(posts, preferences);
+        postServers.clear();
+    }
+
+    void nextTask() {
         PreferencesApi.setPos(++taskPos, preferences);
         getViewState().setTask(posts.get(taskPos));
 

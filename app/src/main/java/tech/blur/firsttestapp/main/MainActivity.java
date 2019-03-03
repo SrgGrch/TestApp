@@ -3,20 +3,19 @@ package tech.blur.firsttestapp.main;
 import androidx.cardview.widget.CardView;
 import tech.blur.firsttestapp.R;
 import tech.blur.firsttestapp.core.model.Post;
+import tech.blur.firsttestapp.core.model.PostServer;
+import tech.blur.firsttestapp.list.ListActivity;
 import tech.blur.firsttestapp.moxy.MvpAndroidxActivity;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
-
-import java.util.zip.Inflater;
 
 public class MainActivity extends MvpAndroidxActivity implements MainView {
 
@@ -42,20 +41,21 @@ public class MainActivity extends MvpAndroidxActivity implements MainView {
         done.setOnClickListener(event -> presenter.onDoneClicked());
 
         presenter.getQueue();
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        MenuItem settings = menu.findItem(R.id.settings);
-        MenuItem history = menu.findItem(R.id.history);
+
+        MenuItem update = menu.findItem(R.id.update);
+        MenuItem list = menu.findItem(R.id.list);
         MenuItem add = menu.findItem(R.id.add);
 
-        //settings.setOnMenuItemClickListener()
-        //history.setOnMenuItemClickListener()
+        list.setOnMenuItemClickListener(menuItem -> {
+            ListActivity.start(this);
+            return true;
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -76,7 +76,7 @@ public class MainActivity extends MvpAndroidxActivity implements MainView {
     @Override
     public void onTaskEnd() {
         title.setText("Ура");
-        title.setText("Все задания выполнены");
+        body.setText("Все задания выполнены");
         cardView.setCardBackgroundColor(getResources().getColor(R.color.cardTaskEnd));
 
     }
