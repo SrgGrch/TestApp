@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -10,8 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
         android:elevation="4dp"
         app:cardCornerRadius="4dp">
 
@@ -21,14 +22,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/body"
+                android:id="@+id/item_body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -39,27 +40,32 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                android:id="@+id/item_chip_group">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/priority_normal"
+                    android:id="@+id/item_priority_normal"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Normal" />
+                    app:chipStrokeColor="@color/colorAccent"
+                    android:text="Normal"
+                    />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/priority_middle"
+                    android:id="@+id/item_priority_middle"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
+                    app:chipStrokeColor="@color/colorAccent"
                     android:layout_height="wrap_content"
                     android:text="Middle" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/priority_high"
+                    android:id="@+id/item_priority_high"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:chipStrokeColor="@color/colorAccent"
                     android:text="High" />
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
