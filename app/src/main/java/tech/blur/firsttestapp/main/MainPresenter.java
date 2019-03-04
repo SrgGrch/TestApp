@@ -40,6 +40,30 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     }
 
+
+    void updateQueue(){
+        queueApi.getPosts()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableSingleObserver<List<PostServer>>() {
+                    @Override
+                    public void onSuccess(List<PostServer> res) {
+                        postServers.addAll(res);
+                        convertPosts();
+                        taskAmount = posts.size();
+                        getViewState().onDownloadReady();
+                        if (taskPos < taskAmount - 1)
+                            getViewState().setTask(posts.get(PreferencesApi.getPos(preferences)));
+                        else getViewState().onTaskEnd();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getViewState().showMessage("Error");
+                    }
+                });
+    }
+
     @SuppressLint("CheckResult")
     void getQueue() {
 
